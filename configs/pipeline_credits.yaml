@@ -1,0 +1,42 @@
+# Pipeline: Credits
+# Bronze -> DQ -> Silver
+
+pipeline_name: credits_pipeline
+primary_key: credit_id
+identify_by: client_id
+
+source:
+  path: "{source_base}/credits.csv"
+  format: csv
+  has_header: true
+  columns:
+    - credit_id
+    - client_id
+    - credit_type
+    - total_amount_eur
+    - balance_amount_eur
+    - status
+
+targets:
+  bronze:
+    database: bronze
+    table: credits
+    write_mode: overwrite
+
+  silver:
+    database: silver
+    table: credits
+    write_mode: merge
+    merge_key: credit_id
+
+transformations:
+  - column: status
+    action: uppercase
+
+  - column: credit_type
+    action: uppercase
+
+data_quality:
+  - column: credit_id
+    check: not_null
+    action: drop_row

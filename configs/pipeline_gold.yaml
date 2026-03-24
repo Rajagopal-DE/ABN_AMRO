@@ -1,0 +1,37 @@
+# Pipeline: Gold
+# Runs after all 4 silver tables are ready
+
+pipeline_name: gold_pipeline
+
+targets:
+  gold:
+    database: gold
+    table: credit_risk_fact
+    write_mode: overwrite
+
+gold_sql: |
+  SELECT
+      c.client_id,
+      c.name,
+      c.city,
+      cr.credit_id,
+      cr.credit_type,
+      cr.total_amount_eur,
+      cr.balance_amount_eur,
+      cr.status                                 AS credit_status,
+      col.collateral_type,
+      COALESCE(col.valuation_eur, 0)            AS collateral_value_eur,
+      CASE
+          WHEN COALESCE(col.valuation_eur, 0) >= cr.balance_amount_eur THEN 'YES'
+          ELSE 'NO'
+      END                                       AS is_covered,
+      CASE
+          WHEN cr.status = 'DEFAULTED'  THEN 'HIGH'
+          WHEN c.credit_score < 500     THEN 'HIGH'
+          WHEN c.credit_score < 700     THEN 'MEDIUM'
+          ELSE                               'LOW'
+      END                                       AS overall_risk
+  FROM {catalog}.silver.clients          c
+  JOIN {catalog}.silver.credits          cr  ON c.client_id  = cr.client_id
+  LEFT JOIN {catalog}.silver.collaterals col ON cr.credit_id = col.credit_id
+  LEFT JOIN {catalog}.silver.market      m   ON col.stock_id = m.market_id

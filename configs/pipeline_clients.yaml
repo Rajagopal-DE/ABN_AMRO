@@ -1,0 +1,38 @@
+# Pipeline: Clients
+# Bronze -> DQ -> Silver
+
+pipeline_name: clients_pipeline
+primary_key: client_id
+identify_by: name
+
+source:
+  path: "{source_base}/clients.csv"
+  format: csv
+  has_header: true
+  columns:
+    - client_id
+    - name
+    - city
+    - annual_income_eur
+    - credit_score
+
+targets:
+  bronze:
+    database: bronze
+    table: clients
+    write_mode: overwrite
+
+  silver:
+    database: silver
+    table: clients
+    write_mode: merge
+    merge_key: client_id
+
+transformations:
+  - column: city
+    action: uppercase
+
+data_quality:
+  - column: client_id
+    check: not_null
+    action: drop_row

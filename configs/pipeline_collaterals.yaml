@@ -1,0 +1,45 @@
+# Pipeline: Collaterals
+# Bronze -> DQ -> Silver
+
+pipeline_name: collaterals_pipeline
+primary_key: collateral_id
+identify_by: credit_id
+
+source:
+  path: "{source_base}/collaterals.csv"
+  format: csv
+  has_header: true
+  columns:
+    - collateral_id
+    - credit_id
+    - collateral_type
+    - numbers
+    - valuation_eur
+    - stock_id
+
+targets:
+  bronze:
+    database: bronze
+    table: collaterals
+    write_mode: overwrite
+
+  silver:
+    database: silver
+    table: collaterals
+    write_mode: merge
+    merge_key: collateral_id
+
+transformations:
+  - column: collateral_type
+    action: uppercase
+
+  - column: valuation_eur
+    action: stock_enrichment
+    join_table: "{catalog}.silver.market"
+    join_on: "collaterals.stock_id = market.market_id"
+    expression: "CASE WHEN collateral_type = 'STOCKS' THEN numbers * current_value_eur ELSE valuation_eur END"
+
+data_quality:
+  - column: collateral_id
+    check: not_null
+    action: drop_row

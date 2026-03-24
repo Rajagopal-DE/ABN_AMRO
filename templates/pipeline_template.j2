@@ -1,0 +1,46 @@
+# Pipeline: {{ pipeline_name }}
+# Bronze -> DQ -> Silver
+
+pipeline_name: {{ pipeline_name }}
+primary_key: {{ primary_key }}
+identify_by: {{ identify_by }}
+
+source:
+  path: "{source_base}/{{ source_file }}"
+  format: csv
+  has_header: true
+  columns:
+{% for col in columns %}
+    - {{ col }}
+{% endfor %}
+
+targets:
+  bronze:
+    database: bronze
+    table: {{ table_name }}
+    write_mode: overwrite
+
+  silver:
+    database: silver
+    table: {{ table_name }}
+    write_mode: merge
+    merge_key: {{ primary_key }}
+
+{% if uppercase %}
+transformations:
+{% for col in uppercase %}
+  - column: {{ col }}
+    action: uppercase
+{% endfor %}
+{% endif %}
+
+{% if dq_rules %}
+# DQ runs after Bronze, before Silver
+data_quality:
+{% for rule in dq_rules %}
+  - column: {{ rule.column }}
+    check: not_null
+    action: {{ rule.action }}
+
+{% endfor %}
+{% endif %}

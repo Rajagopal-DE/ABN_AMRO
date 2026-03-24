@@ -1,0 +1,40 @@
+# Pipeline: Market
+# Bronze -> DQ -> Silver
+
+pipeline_name: market_pipeline
+primary_key: market_id
+identify_by: ticker
+
+source:
+  path: "{source_base}/market.csv"
+  format: csv
+  has_header: true
+  columns:
+    - market_id
+    - stock_name
+    - ticker
+    - current_value_eur
+
+targets:
+  bronze:
+    database: bronze
+    table: market
+    write_mode: overwrite
+
+  silver:
+    database: silver
+    table: market
+    write_mode: merge
+    merge_key: market_id
+
+transformations:
+  - column: ticker
+    action: uppercase
+
+  - column: stock_name
+    action: uppercase
+
+data_quality:
+  - column: market_id
+    check: not_null
+    action: drop_row

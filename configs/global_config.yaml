@@ -1,0 +1,9 @@
+workspace: project2
+catalog: project2
+ 
+source_base: "abfss://srcdata@adlsstorageprj2.dfs.core.windows.net"
+managed_base: "abfss://project2@adlsstorageprj2.dfs.core.windows.net"
+ 
+audit_database: audit
+audit_table: pipeline_run_log
+dq_table: dq_results
