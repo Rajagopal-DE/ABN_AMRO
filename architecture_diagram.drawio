@@ -1,0 +1,78 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0" version="29.6.6">
+  <diagram name="ABN AMRO ETL Architecture" id="0">
+    <mxGraphModel dx="1378" dy="746" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAEEDA;strokeColor=#854F0B;fontColor=#412402;fontSize=12;" value="&lt;b&gt;Jinja2 template&lt;/b&gt;&lt;br&gt;+ generate_pipeline.py" vertex="1">
+          <mxGeometry height="50" width="200" x="270" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="3" edge="1" parent="1" source="2" style="edgeStyle=orthogonalEdgeStyle;" target="5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1EFE8;strokeColor=#5F5E5A;fontColor=#2C2C2A;fontSize=12;" value="&lt;b&gt;ADLS source&lt;/b&gt;&lt;br&gt;raw CSV files" vertex="1">
+          <mxGeometry height="50" width="150" x="190" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAEEDA;strokeColor=#854F0B;fontColor=#412402;fontSize=12;" value="&lt;b&gt;YAML configs&lt;/b&gt;&lt;br&gt;pipeline definitions" vertex="1">
+          <mxGeometry height="50" width="150" x="400" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="6" parent="1" style="swimlane;startSize=25;fillColor=none;strokeColor=#888780;strokeWidth=1;dashed=1;dashPattern=6 3;fontSize=11;fontColor=#5F5E5A;" value="ETL framework" vertex="1">
+          <mxGeometry height="200" width="360" x="190" y="260" as="geometry">
+            <mxRectangle height="30" width="110" x="60" y="240" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="9" parent="6" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEEDFE;strokeColor=#534AB7;fontColor=#26215C;fontSize=12;" value="&lt;b&gt;etl_utils.py&lt;/b&gt;&lt;br&gt;read, transform, write" vertex="1">
+          <mxGeometry height="50" width="150" x="20" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="10" parent="6" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAECE7;strokeColor=#993C1D;fontColor=#4A1B0C;fontSize=12;" value="&lt;b&gt;dq_checker.py&lt;/b&gt;&lt;br&gt;DQ rules + logging" vertex="1">
+          <mxGeometry height="50" width="150" x="190" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="11" parent="6" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEEDFE;strokeColor=#534AB7;fontColor=#26215C;fontSize=12;" value="&lt;b&gt;executor.py&lt;/b&gt;&lt;br&gt;orchestrates pipeline" vertex="1">
+          <mxGeometry height="50" width="150" x="20" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="12" parent="6" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1EFE8;strokeColor=#5F5E5A;fontColor=#2C2C2A;fontSize=12;" value="&lt;b&gt;notebook&lt;/b&gt;&lt;br&gt;run_all_pipelines" vertex="1">
+          <mxGeometry height="50" width="150" x="190" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="7" edge="1" parent="1" source="4" style="edgeStyle=orthogonalEdgeStyle;" target="6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="8" edge="1" parent="1" source="5" style="edgeStyle=orthogonalEdgeStyle;" target="6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="14" edge="1" parent="1" source="6" style="edgeStyle=orthogonalEdgeStyle;" target="15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="15" parent="1" style="swimlane;startSize=25;fillColor=none;strokeColor=#888780;strokeWidth=1;dashed=1;dashPattern=6 3;fontSize=11;fontColor=#5F5E5A;" value="Unity catalog" vertex="1">
+          <mxGeometry height="400" width="260" x="630" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="16" parent="15" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAEEDA;strokeColor=#854F0B;fontColor=#412402;fontSize=12;" value="&lt;b&gt;Bronze layer&lt;/b&gt;&lt;br&gt;raw data, overwrite" vertex="1">
+          <mxGeometry height="60" width="220" x="20" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="17" edge="1" parent="15" source="16" style="edgeStyle=orthogonalEdgeStyle;fontSize=11;" target="18" value="DQ checks">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="18" parent="15" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1EFE8;strokeColor=#5F5E5A;fontColor=#2C2C2A;fontSize=12;" value="&lt;b&gt;Silver layer&lt;/b&gt;&lt;br&gt;cleaned, merged" vertex="1">
+          <mxGeometry height="60" width="220" x="20" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="19" edge="1" parent="15" source="18" style="edgeStyle=orthogonalEdgeStyle;" target="20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="20" parent="15" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5EE;strokeColor=#0F6E56;fontColor=#04342C;fontSize=12;" value="&lt;b&gt;Gold layer&lt;/b&gt;&lt;br&gt;risk report, overwrite" vertex="1">
+          <mxGeometry height="60" width="220" x="20" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="21" parent="15" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F1FB;strokeColor=#185FA5;fontColor=#042C53;fontSize=12;" value="&lt;b&gt;Audit layer&lt;/b&gt;&lt;br&gt;run log + DQ results" vertex="1">
+          <mxGeometry height="40" width="220" x="20" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="qB3X0exlXHLTYdbwrVz--24" edge="1" parent="1" source="13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="13" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF3DE;strokeColor=#3B6D11;fontColor=#173404;fontSize=12;" value="&lt;b&gt;pytest&lt;/b&gt;&lt;br&gt;config, transform, DQ tests" vertex="1">
+          <mxGeometry height="30" width="180" x="670" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="qB3X0exlXHLTYdbwrVz--29" edge="1" parent="1" source="13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.9;entryY=0.009;entryDx=0;entryDy=0;entryPerimeter=0;" target="6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
